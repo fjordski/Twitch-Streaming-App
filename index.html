@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Twitch Streaming Display via AJAX</title>
+</head>
+<body>
+<style>
+
+    ul
+    {
+        list-style-type: none;
+    }
+
+</style>
+
+<div id="title">
+    Twitch Streamers Online NOW
+</div>
+<ul id="streamers"></ul>
+
+<script
+        src="https://code.jquery.com/jquery-3.1.1.min.js"
+        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+        crossorigin="anonymous"></script>
+<script>
+    var channels = ["ESL_SC2", "OgamingSC2", "cretetion", "storbeck", "habathcx"];
+
+    function getChannelInfo() {
+        channels.forEach(function (channel) {
+            function makeURL(type, userName) {
+                return 'https://wind-bow.gomix.me/twitch-api/' + type + '/' + userName;
+            };
+            $.getJSON(makeURL("streams", channel), function (data) {
+                console.log(data);
+                if (data.stream != null) {
+                    $('#streamers').append('<li>' + '<img class="logo" src="' + data.stream.channel.logo + '"/>' + channel + ' is playing ' + data.stream.game);
+                }
+            });
+        });
+    }
+
+    $(document).ready(function () {
+        getChannelInfo();
+    });
+
+</script>
+
+</body>
+</html>
